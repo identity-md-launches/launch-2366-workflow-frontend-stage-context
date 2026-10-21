@@ -1,8 +1,8 @@
 {
   "chainId": 1,
-  "Renderer": "0x4c7fe2202b29c23b54bd45053a6c88061f1296ef",
-  "Composer": "0x1d7da5353830248b042fc1396d5d12c31ac69824",
-  "Registry": "0xdd0017e40f1a5fe514d15d108ce01eb52f2a5edb",
+  "Renderer": "0x8309e5734cb8df4139878c74e2114a87ebc2af5c",
+  "Composer": "0xae4b30f656be1069748c351aecf396a99253ee9c",
+  "Registry": "0x9cb36ecca47d753e4e62ed87c12a2b7b20dfa828",
   "WhitelistCurator": "0xcb0b0531e86a9ac36fa865ca8e3dbccf047fda91",
   "IDMD": "0x0000ec93127baa929e58e97dd0095a2bfb38ec1d",
   "IMD": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
@@ -23,9 +23,9 @@
     "hooks": "0xc6c965bd164c483e87d0b550671798e9a3602840"
   },
   "runtimeHashes": {
-    "Renderer": "0xf17b2f216bb8308110f7b649c7c0acd8bfbd81c235fb4423569d2160d3756a6b",
-    "Composer": "0x19d1b889059013126fe03ef4b0a36e578f2eec64798f9da774d59d69fa012cce",
-    "Registry": "0x1c9210de6ffd1eda2ace94bc9459038c3a698701686997ef4704d20282be18ba"
+    "Renderer": "0x87eaea63e4bb92d2f0da4f1093f8cd4e67d45766f711aea098cbb0dbfd1b6caa",
+    "Composer": "0x7dfc0cea1c5cd3d69cb48300f993d06a1bcaf7829cb821db1938261628d05322",
+    "Registry": "0x3830b10816d6b205ff71c5f7cb3081d7360c21295fdb1b55db0656f464b1b32c"
   },
   "publicRpcs": [
     "https://ethereum-rpc.publicnode.com",

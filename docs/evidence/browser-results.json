@@ -4,14 +4,14 @@
       "name": "chromium: landing exact copy and first-screen action",
       "passed": true,
       "details": {
-        "buttonBottom": 720.359375
+        "buttonBottom": 644.34375
       }
     },
     {
       "name": "chromium: claim mint action on the first phone screen",
       "passed": true,
       "details": {
-        "buttonBottom": 755.5
+        "buttonBottom": 796.265625
       }
     },
     {
@@ -32,7 +32,7 @@
       "details": {
         "width": 390,
         "scroll": 390,
-        "h1": "Facts about wallets, onchain and sworn by the swarm.",
+        "h1": "Facts about wallets, sworn onchain.",
         "images": true
       }
     },
@@ -62,7 +62,7 @@
       "details": {
         "width": 390,
         "scroll": 390,
-        "h1": "Mint your Sworn card",
+        "h1": "Claim",
         "images": true
       }
     },
@@ -112,7 +112,7 @@
       "details": {
         "width": 1280,
         "scroll": 1280,
-        "h1": "Facts about wallets, onchain and sworn by the swarm.",
+        "h1": "Facts about wallets, sworn onchain.",
         "images": true
       }
     },
@@ -142,7 +142,7 @@
       "details": {
         "width": 1280,
         "scroll": 1280,
-        "h1": "Mint your Sworn card",
+        "h1": "Claim",
         "images": true
       }
     },
@@ -192,7 +192,7 @@
       "details": {
         "width": 320,
         "scroll": 320,
-        "h1": "Facts about wallets, onchain and sworn by the swarm.",
+        "h1": "Facts about wallets, sworn onchain.",
         "images": true
       }
     },
@@ -222,7 +222,7 @@
       "details": {
         "width": 320,
         "scroll": 320,
-        "h1": "Mint your Sworn card",
+        "h1": "Claim",
         "images": true
       }
     },
@@ -272,7 +272,7 @@
       "details": {
         "width": 780,
         "scroll": 780,
-        "h1": "Facts about wallets, onchain and sworn by the swarm.",
+        "h1": "Facts about wallets, sworn onchain.",
         "images": true
       }
     },
@@ -302,7 +302,7 @@
       "details": {
         "width": 780,
         "scroll": 780,
-        "h1": "Mint your Sworn card",
+        "h1": "Claim",
         "images": true
       }
     },
@@ -355,6 +355,14 @@
       "passed": true
     },
     {
+      "name": "chromium: direct-load route titles, anchors and selected traits",
+      "passed": true
+    },
+    {
+      "name": "chromium: stories link to the three claim steps and Integrate",
+      "passed": true
+    },
+    {
       "name": "chromium: wallet picker, dismissal and focus return",
       "passed": true
     },
@@ -363,17 +371,15 @@
       "passed": true,
       "details": {
         "passes": 26,
-        "incomplete": 1,
-        "ownerApproved": []
+        "incomplete": 1
       }
     },
     {
       "name": "chromium: automated accessibility / catalog",
       "passed": true,
       "details": {
-        "passes": 31,
-        "incomplete": 1,
-        "ownerApproved": []
+        "passes": 30,
+        "incomplete": 0
       }
     },
     {
@@ -381,26 +387,23 @@
       "passed": true,
       "details": {
         "passes": 25,
-        "incomplete": 0,
-        "ownerApproved": []
+        "incomplete": 0
       }
     },
     {
       "name": "chromium: automated accessibility / claim",
       "passed": true,
       "details": {
-        "passes": 35,
-        "incomplete": 1,
-        "ownerApproved": []
+        "passes": 34,
+        "incomplete": 0
       }
     },
     {
       "name": "chromium: automated accessibility / fact-vs-artifact",
       "passed": true,
       "details": {
-        "passes": 29,
-        "incomplete": 1,
-        "ownerApproved": []
+        "passes": 28,
+        "incomplete": 0
       }
     },
     {
@@ -408,23 +411,15 @@
       "passed": true,
       "details": {
         "passes": 25,
-        "incomplete": 1,
-        "ownerApproved": []
+        "incomplete": 1
       }
     },
     {
       "name": "chromium: automated accessibility / whitelistcurator",
       "passed": true,
       "details": {
-        "passes": 29,
-        "incomplete": 1,
-        "ownerApproved": [
-          {
-            "id": "color-contrast",
-            "nodes": 53,
-            "reason": "The reviewed palette uses #5f6861 for decorative source line numbers (aria-hidden). Workflow requires unchanged colours; measured contrast 3.43:1 at 12px is retained and documented, not an AA pass."
-          }
-        ]
+        "passes": 28,
+        "incomplete": 1
       }
     },
     {
@@ -432,8 +427,7 @@
       "passed": true,
       "details": {
         "passes": 23,
-        "incomplete": 0,
-        "ownerApproved": []
+        "incomplete": 0
       }
     },
     {
@@ -446,459 +440,6 @@
     },
     {
       "name": "chromium: local resources and console",
-      "passed": true,
-      "details": {
-        "localFailures": [],
-        "scriptErrors": [],
-        "expectedRpcErrors": []
-      }
-    },
-    {
-      "name": "webkit: landing exact copy and first-screen action",
-      "passed": true,
-      "details": {
-        "buttonBottom": 720.359375
-      }
-    },
-    {
-      "name": "webkit: claim mint action on the first phone screen",
-      "passed": true,
-      "details": {
-        "buttonBottom": 755.5
-      }
-    },
-    {
-      "name": "webkit: address validation",
-      "passed": true
-    },
-    {
-      "name": "webkit: primary address action and honest RPC failure",
-      "passed": true
-    },
-    {
-      "name": "webkit: keyboard focus and skip link",
-      "passed": true
-    },
-    {
-      "name": "webkit: landing at 390",
-      "passed": true,
-      "details": {
-        "width": 390,
-        "scroll": 390,
-        "h1": "Facts about wallets, onchain and sworn by the swarm.",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: catalog at 390",
-      "passed": true,
-      "details": {
-        "width": 390,
-        "scroll": 390,
-        "h1": "Catalog",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: explorer at 390",
-      "passed": true,
-      "details": {
-        "width": 390,
-        "scroll": 390,
-        "h1": "Explorer",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: claim at 390",
-      "passed": true,
-      "details": {
-        "width": 390,
-        "scroll": 390,
-        "h1": "Mint your Sworn card",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: fact-vs-artifact at 390",
-      "passed": true,
-      "details": {
-        "width": 390,
-        "scroll": 390,
-        "h1": "Fact vs artifact",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: integrate at 390",
-      "passed": true,
-      "details": {
-        "width": 390,
-        "scroll": 390,
-        "h1": "Integrate",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: whitelistcurator at 390",
-      "passed": true,
-      "details": {
-        "width": 390,
-        "scroll": 390,
-        "h1": "WhitelistCurator",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: about at 390",
-      "passed": true,
-      "details": {
-        "width": 390,
-        "scroll": 390,
-        "h1": "About",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: landing at 1280",
-      "passed": true,
-      "details": {
-        "width": 1280,
-        "scroll": 1280,
-        "h1": "Facts about wallets, onchain and sworn by the swarm.",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: catalog at 1280",
-      "passed": true,
-      "details": {
-        "width": 1280,
-        "scroll": 1280,
-        "h1": "Catalog",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: explorer at 1280",
-      "passed": true,
-      "details": {
-        "width": 1280,
-        "scroll": 1280,
-        "h1": "Explorer",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: claim at 1280",
-      "passed": true,
-      "details": {
-        "width": 1280,
-        "scroll": 1280,
-        "h1": "Mint your Sworn card",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: fact-vs-artifact at 1280",
-      "passed": true,
-      "details": {
-        "width": 1280,
-        "scroll": 1280,
-        "h1": "Fact vs artifact",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: integrate at 1280",
-      "passed": true,
-      "details": {
-        "width": 1280,
-        "scroll": 1280,
-        "h1": "Integrate",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: whitelistcurator at 1280",
-      "passed": true,
-      "details": {
-        "width": 1280,
-        "scroll": 1280,
-        "h1": "WhitelistCurator",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: about at 1280",
-      "passed": true,
-      "details": {
-        "width": 1280,
-        "scroll": 1280,
-        "h1": "About",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: landing at 320",
-      "passed": true,
-      "details": {
-        "width": 320,
-        "scroll": 320,
-        "h1": "Facts about wallets, onchain and sworn by the swarm.",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: catalog at 320",
-      "passed": true,
-      "details": {
-        "width": 320,
-        "scroll": 320,
-        "h1": "Catalog",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: explorer at 320",
-      "passed": true,
-      "details": {
-        "width": 320,
-        "scroll": 320,
-        "h1": "Explorer",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: claim at 320",
-      "passed": true,
-      "details": {
-        "width": 320,
-        "scroll": 320,
-        "h1": "Mint your Sworn card",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: fact-vs-artifact at 320",
-      "passed": true,
-      "details": {
-        "width": 320,
-        "scroll": 320,
-        "h1": "Fact vs artifact",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: integrate at 320",
-      "passed": true,
-      "details": {
-        "width": 320,
-        "scroll": 320,
-        "h1": "Integrate",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: whitelistcurator at 320",
-      "passed": true,
-      "details": {
-        "width": 320,
-        "scroll": 320,
-        "h1": "WhitelistCurator",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: about at 320",
-      "passed": true,
-      "details": {
-        "width": 320,
-        "scroll": 320,
-        "h1": "About",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: landing at 780",
-      "passed": true,
-      "details": {
-        "width": 780,
-        "scroll": 780,
-        "h1": "Facts about wallets, onchain and sworn by the swarm.",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: catalog at 780",
-      "passed": true,
-      "details": {
-        "width": 780,
-        "scroll": 780,
-        "h1": "Catalog",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: explorer at 780",
-      "passed": true,
-      "details": {
-        "width": 780,
-        "scroll": 780,
-        "h1": "Explorer",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: claim at 780",
-      "passed": true,
-      "details": {
-        "width": 780,
-        "scroll": 780,
-        "h1": "Mint your Sworn card",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: fact-vs-artifact at 780",
-      "passed": true,
-      "details": {
-        "width": 780,
-        "scroll": 780,
-        "h1": "Fact vs artifact",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: integrate at 780",
-      "passed": true,
-      "details": {
-        "width": 780,
-        "scroll": 780,
-        "h1": "Integrate",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: whitelistcurator at 780",
-      "passed": true,
-      "details": {
-        "width": 780,
-        "scroll": 780,
-        "h1": "WhitelistCurator",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: about at 780",
-      "passed": true,
-      "details": {
-        "width": 780,
-        "scroll": 780,
-        "h1": "About",
-        "images": true
-      }
-    },
-    {
-      "name": "webkit: claim pre-wallet, payment choice and recoverable flow",
-      "passed": true
-    },
-    {
-      "name": "webkit: catalog / source navigation",
-      "passed": true
-    },
-    {
-      "name": "webkit: wallet picker, dismissal and focus return",
-      "passed": true
-    },
-    {
-      "name": "webkit: automated accessibility / landing",
-      "passed": true,
-      "details": {
-        "passes": 26,
-        "incomplete": 1,
-        "ownerApproved": []
-      }
-    },
-    {
-      "name": "webkit: automated accessibility / catalog",
-      "passed": true,
-      "details": {
-        "passes": 31,
-        "incomplete": 1,
-        "ownerApproved": []
-      }
-    },
-    {
-      "name": "webkit: automated accessibility / explorer",
-      "passed": true,
-      "details": {
-        "passes": 25,
-        "incomplete": 0,
-        "ownerApproved": []
-      }
-    },
-    {
-      "name": "webkit: automated accessibility / claim",
-      "passed": true,
-      "details": {
-        "passes": 35,
-        "incomplete": 1,
-        "ownerApproved": []
-      }
-    },
-    {
-      "name": "webkit: automated accessibility / fact-vs-artifact",
-      "passed": true,
-      "details": {
-        "passes": 29,
-        "incomplete": 1,
-        "ownerApproved": []
-      }
-    },
-    {
-      "name": "webkit: automated accessibility / integrate",
-      "passed": true,
-      "details": {
-        "passes": 25,
-        "incomplete": 1,
-        "ownerApproved": []
-      }
-    },
-    {
-      "name": "webkit: automated accessibility / whitelistcurator",
-      "passed": true,
-      "details": {
-        "passes": 29,
-        "incomplete": 1,
-        "ownerApproved": [
-          {
-            "id": "color-contrast",
-            "nodes": 53,
-            "reason": "The reviewed palette uses #5f6861 for decorative source line numbers (aria-hidden). Workflow requires unchanged colours; measured contrast 3.43:1 at 12px is retained and documented, not an AA pass."
-          }
-        ]
-      }
-    },
-    {
-      "name": "webkit: automated accessibility / about",
-      "passed": true,
-      "details": {
-        "passes": 23,
-        "incomplete": 0,
-        "ownerApproved": []
-      }
-    },
-    {
-      "name": "webkit: no runtime API, font or script CDN calls",
-      "passed": true,
-      "details": [
-        "ethereum-rpc.publicnode.com",
-        "eth.drpc.org"
-      ]
-    },
-    {
-      "name": "webkit: local resources and console",
       "passed": true,
       "details": {
         "localFailures": [],
@@ -924,5 +465,12 @@
     "integrate-1280.png",
     "whitelistcurator-1280.png",
     "about-1280.png"
-  ]
+  ],
+  "export": {
+    "launchId": "7f4dd9ec-15e4-4062-8b94-9d1a859513cd",
+    "sourceCommit": "e462b062e68c0962a15d05cfe7d70dacbb354cbd",
+    "attestationHash": "bbe3ff03a37e92a5d34cd92811cb32e1ddda5c174cafdf99c99c9d318b3d86c2",
+    "manifestSha256": "c36c1365e1476e999fa64d46e58639aedce4d83de04b12524f84faa250fd155b",
+    "assetCount": 52
+  }
 }

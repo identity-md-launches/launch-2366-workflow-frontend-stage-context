@@ -39,11 +39,11 @@ test('item 5: the oracle disclaimer gates paid upgrade and shared request, never
  assert.deepEqual(plainGuard(unchecked),{ok:true});
  const claim=src('Claim.tsx');assert(claim.includes('id="oracle-disclaimer"')&&claim.includes('useState(false);const [eligTick'),'unchecked on load');
 });
-test('item 6: a payment choice precedes each of the four paying buttons in document order',()=>{
+test('F-39: one payment choice applies to every prepare action',()=>{
  const claim=src('Claim.tsx');
- const order=[...claim.matchAll(/<PaymentChoice [^>]*name="(\w+)"|>(Mint card|Prepare paid upgrade|Prepare shared request|Prepare spec registration)</g)].map(m=>m[1]??m[2]);
- assert.deepEqual(order,['mint','Mint card','upgrade','Prepare paid upgrade','shared','Prepare shared request','spec','Prepare spec registration']);
- assert(!claim.includes('name="payment"'),'the single choice above the flow is gone');
+ assert.equal((claim.match(/<PaymentChoice /g)??[]).length,1);
+ assert(claim.includes('name="all"'));
+ assert(claim.includes('This payment choice applies to every prepare button'));
 });
 test('body 2, item 1: 25 single-trait cards and the empty card exist, rendered by the Renderer and recorded',()=>{
  const dir=new URL('../public/assets/traits/',import.meta.url);
@@ -60,7 +60,7 @@ test('body 2, item 1: 25 single-trait cards and the empty card exist, rendered b
 test('body 2, items 2 and 3: MiniCards sit beside the 01 direct select and each 02 oracle row, About and Fact vs artifact',()=>{
  const claim=src('Claim.tsx');const pages=src('pages.tsx');const components=src('components.tsx');
  assert(claim.includes('id="direct-id"') && claim.includes('<MiniCard id={Number(direct)}/>'));
- assert(/trait-picker[^]*?<MiniCard id=\{t\.id\}\/>/.test(claim));
+ assert(/trait-picker[^]*?<MiniCard id=\{t\.id\}/.test(claim));
  assert.equal((pages.match(/<CardPair\/>/g)??[]).length,2);
  assert(components.includes('on an empty card')&&components.includes('The card is the artifact. The fact belongs to the wallet'));
  const mini=components.slice(components.indexOf('export function MiniCard'),components.indexOf('export function CardPair'));assert(!mini.includes('fetch(')&&!mini.includes('withRpc')&&!components.includes('createPublicClient'),'no runtime render for a preview');

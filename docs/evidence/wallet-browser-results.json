@@ -1,0 +1,117 @@
+{
+  "results": [
+    {
+      "name": "EIP-6963 names and icons list both extensions and suppress the generic row",
+      "passed": true,
+      "details": [
+        {
+          "width": 28,
+          "height": 28,
+          "loaded": true
+        },
+        {
+          "width": 28,
+          "height": 28,
+          "loaded": true
+        },
+        {
+          "width": 28,
+          "height": 28,
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "name": "a declined named wallet returns to idle with an inline retry message",
+      "passed": true
+    },
+    {
+      "name": "named wallet connection on the wrong chain offers a switch",
+      "passed": true
+    },
+    {
+      "name": "a declined chain switch is visible beside Connect on the landing page",
+      "passed": true
+    },
+    {
+      "name": "an unknown chain is added using the exact handoff network before switching",
+      "passed": true,
+      "details": {
+        "switches": 3,
+        "adds": 1
+      }
+    },
+    {
+      "name": "a stored connection reconnects after reload without asking for accounts",
+      "passed": true,
+      "details": [
+        "eth_accounts",
+        "eth_accounts",
+        "eth_chainId"
+      ]
+    },
+    {
+      "name": "account changes invalidate the old identity and disconnect restores Connect",
+      "passed": true
+    },
+    {
+      "name": "named-wallet checks have no page errors or failed local resources",
+      "passed": true,
+      "details": {
+        "errors": [],
+        "resourceFailures": []
+      }
+    },
+    {
+      "name": "390px phone without a provider has four wallet-browser links and Coinbase Smart Wallet",
+      "passed": true,
+      "details": {
+        "rows": [
+          {
+            "name": "Open in MetaMask",
+            "height": 50
+          },
+          {
+            "name": "Open in Coinbase Wallet",
+            "height": 50
+          },
+          {
+            "name": "Open in Rabby",
+            "height": 50
+          },
+          {
+            "name": "Open in Phantom",
+            "height": 50
+          },
+          {
+            "name": "Coinbase Smart Wallet",
+            "height": 50
+          }
+        ],
+        "links": [
+          "https://link.metamask.io/dapp/127.0.0.1:42113/preview/index.html",
+          "https://go.cb-w.com/dapp?cb_url=http%3A%2F%2F127.0.0.1%3A42113%2Fpreview%2Findex.html",
+          "https://go.rabby.io/mobile/?_cmd=open-dapp&dapp=http%3A%2F%2F127.0.0.1%3A42113%2Fpreview%2Findex.html",
+          "https://phantom.app/ul/browse/http%3A%2F%2F127.0.0.1%3A42113%2Fpreview%2Findex.html?ref=http%3A%2F%2F127.0.0.1%3A42113"
+        ],
+        "bounds": {
+          "x": 0,
+          "y": 407.8125,
+          "width": 390,
+          "height": 436.1875
+        }
+      }
+    },
+    {
+      "name": "phone picker closes with its single close control and restores focus",
+      "passed": true
+    }
+  ],
+  "export": {
+    "launchId": "7f4dd9ec-15e4-4062-8b94-9d1a859513cd",
+    "sourceCommit": "e462b062e68c0962a15d05cfe7d70dacbb354cbd",
+    "attestationHash": "bbe3ff03a37e92a5d34cd92811cb32e1ddda5c174cafdf99c99c9d318b3d86c2",
+    "manifestSha256": "c36c1365e1476e999fa64d46e58639aedce4d83de04b12524f84faa250fd155b",
+    "assetCount": 52
+  }
+}

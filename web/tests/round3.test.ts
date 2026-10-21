@@ -17,7 +17,7 @@ test('F-18.29 / F-18.30: four class cards replace the stat cards; HOW IT WORKS i
  const pages=src('pages.tsx');assert(!pages.includes('className="stats"'),'the stat cards are gone');assert(pages.includes('<ClassCards/>')&&pages.includes('<Stories/>'));
 });
 test('F-18.27 / F-18.28: larger landing prose; the builders part of the contract comment follows WHY SWORN',()=>{
- const css=src('styles.css');assert.match(css,/\.intro-copy p, \.measure \{ font-size: 15px/);
+ const css=src('styles.css');assert.match(css,/--type-prose: 15px/);assert.match(css,/\.prose \{ font-size: var\(--type-prose\)/);
  assert.deepEqual(BUILDERS_LINES,[32,53]);
  const excerpt=JSON.parse(readFileSync(new URL('../public/data/curator-source.json',import.meta.url),'utf8'));
  const lines=excerpt.lines.filter((l:{line:number})=>l.line>=32&&l.line<=53);
@@ -46,11 +46,11 @@ test('F-18.19/20/21: steps 01, 02 and 03 each carry who, cost, risk and who bene
  const boxes=[...claim.matchAll(/<InfoBox who=/g)].length;assert.equal(boxes,3);
  for(const step of ['01','02','03']){const i=claim.indexOf(`<ClaimStep number="${step}"`);const j=claim.indexOf('<ClaimStep number=',i+10);assert(claim.slice(i,j<0?undefined:j).includes('<InfoBox who='),`step ${step}`);}
 });
-test('F-18.22: the oracle picker is a table with headers, the preview centred in the middle column, and the curation note',()=>{
+test('F-18.22: F-36: the oracle picker has three columns, 56px previews and the curation note',()=>{
  const claim=src('Claim.tsx');
  const headers=[...claim.matchAll(/<th(?: className="preview-cell")?>([^<]+)<\/th>/g)].map(m=>m[1]);
- assert.deepEqual(headers.slice(0,5),['Select','Fact','Preview on an empty card','What it adds to the card','Who benefits']);
- assert(claim.includes('<td className="preview-cell"><MiniCard id={t.id}/></td>'));
+ assert.deepEqual(headers.slice(0,3),['Select','Fact','Preview']);
+ assert(claim.includes('<td className="preview-cell"><MiniCard id={t.id} size={56}/></td>'));
  assert.match(src('styles.css'),/\.trait-picker td\.preview-cell, \.trait-picker th\.preview-cell \{ text-align: center/);
  assert(claim.includes('only facts minted onchain count'));
 });

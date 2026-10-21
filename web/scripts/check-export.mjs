@@ -17,5 +17,5 @@ const exported=files(root).filter(path=>path!=='imd-deployment.json');assert.dee
 let total=0;
 for(const a of config.assets){assert(valid(a.path));assert(/^[a-f0-9]{64}$/.test(a.sha256));const bytes=readFileSync(resolve(root,a.path));assert(bytes.length<=8388608);total+=bytes.length;assert.equal(createHash('sha256').update(bytes).digest('hex'),a.sha256,`${a.path} hash`);}
 for(const c of config.contracts){assert(valid(c.abiPath));const abi=read(resolve(root,c.abiPath));assert.equal(keccak256(toHex(JSON.stringify(canonical(abi)))).slice(2),c.abiHash);}
-assert(total<24*1024*1024);const html=readFileSync(resolve(root,'index.html'),'utf8');assert(!/(?:src|href)="\//.test(html));assert(html.includes('og:image')&&html.includes('name="description"')&&html.includes('rel="icon"'));
+assert(total+readFileSync(resolve(root,'imd-deployment.json')).length<=8*1024*1024);const html=readFileSync(resolve(root,'index.html'),'utf8');assert(!/(?:src|href)="\//.test(html));assert(html.includes('og:image')&&html.includes('name="description"')&&html.includes('rel="icon"'));
 console.log(`PASS: exact handoff/network, ${config.contracts.length} attested ABIs, ${config.assets.length} asset hashes, ${total.toLocaleString('en-US')} exported bytes, relative entrypoint assets.`);

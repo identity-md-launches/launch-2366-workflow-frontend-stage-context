@@ -7,7 +7,9 @@ export const READ_FAILED = 'could not read, retry';
 export const DISCLAIMER_TEXT = 'I understand: an oracle price is spent whatever the answer, and a missed answer refunds nothing.';
 export const DISCLAIMER_REASON = 'accept the oracle disclaimer first';
 
-export type Reads = {verifiedIds:number[]; sharedVerified:boolean};
+export type Reads = {verifiedIds:number[]; sharedVerified:boolean; joined?:boolean; tokenId?:bigint};
+export const CANNOT_BE_TRUE = 'cannot be true: not in WhitelistCurator.sol';
+export const curatorRequired = (id:number) => (id>=701 && id<=1105) || id===1201;
 export type Context = {connected:boolean; chainId?:number; reads?:Reads; failed:boolean; loading?:boolean; acknowledged:boolean};
 export const READING = 'reading eligibility…';
 
@@ -24,23 +26,30 @@ function oracleGate(c:Context):Guard|undefined {
  if(!c.acknowledged)return {ok:false,reason:DISCLAIMER_REASON};
  return base(c);
 }
-/** mintCard and applySharedFact: only the chain matters here; the flow re-checks AlreadyMinted before signing. */
+/** Mint and apply require current chain and reads; the flow rechecks the concrete call before signing. */
 export function plainGuard(c:Context):Guard {
  if(c.connected&&c.chainId!==1)return {ok:false,reason:WRONG_CHAIN};
+ if(c.connected&&c.failed)return {ok:false,reason:READ_FAILED};
+ if(c.connected&&(c.loading||!c.reads))return {ok:false,reason:READING};
  return OK;
 }
 /** upgrade(ids, maxPrice): refused when one selected id is already verified for the wallet. */
 export function upgradeGuard(c:Context, selected:number[]):Guard {
+ if(c.connected&&c.chainId===1&&!c.failed&&!c.loading&&c.reads?.joined===false&&selected.some(curatorRequired))return {ok:false,reason:CANNOT_BE_TRUE};
  const first=oracleGate(c);if(first)return first;
  if(!c.connected)return OK;
+ if(c.reads!.joined===false&&selected.some(curatorRequired))return {ok:false,reason:CANNOT_BE_TRUE};
+ if(!selected.length)return {ok:false,reason:'select at least one oracle fact'};
  const done=selected.filter(id=>c.reads!.verifiedIds.includes(id));
  if(done.length)return {ok:false,reason:`already verified: ${done.join(', ')}`};
  return OK;
 }
 /** requestSharedFact(id, maxPrice): refused when the id is already verified for the wallet. */
-export function sharedGuard(c:Context):Guard {
+export function sharedGuard(c:Context,id=1201):Guard {
+ if(c.connected&&c.chainId===1&&!c.failed&&!c.loading&&c.reads?.joined===false&&curatorRequired(id))return {ok:false,reason:CANNOT_BE_TRUE};
  const first=oracleGate(c);if(first)return first;
  if(!c.connected)return OK;
+ if(c.reads!.joined===false&&curatorRequired(id))return {ok:false,reason:CANNOT_BE_TRUE};
  if(c.reads!.sharedVerified)return {ok:false,reason:'already verified for this wallet'};
  return OK;
 }

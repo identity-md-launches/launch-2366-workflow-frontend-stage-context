@@ -1,7 +1,7 @@
 {
-  "sourceCommit": "832cc45f59acdda805b51799647be24c0cae9741",
-  "renderer": "0x4c7fe2202b29c23b54bd45053a6c88061f1296ef",
-  "block": "26236763",
+  "sourceCommit": "e462b062e68c0962a15d05cfe7d70dacbb354cbd",
+  "renderer": "0x8309e5734cb8df4139878c74e2114a87ebc2af5c",
+  "block": "26239068",
   "source": "https://ethereum-rpc.publicnode.com",
   "method": "Renderer.tokenURIOf via eth_call; ephemeral ICardSource code override for explicitly synthetic preview inputs",
   "assets": [
@@ -167,8 +167,8 @@
         601
       ],
       "bytes": 2607,
-      "sha256": "e75e9875e950fa623402d1320e712a6d291504a35dc672a7b87c848f844d3b80",
-      "adapterCodeHash": "0x9c7fda3a8db9326b83a7473f01fa16c6a713f9349e35e7bc6347a1ace4006069"
+      "sha256": "767c8f565512d918715f220ec63c7ea20e98e4dda1274d11aa81d68d941f0621",
+      "adapterCodeHash": "0x20c9f595d03e349e6f303b7b12d6d50377377d8faa9888cfb1e24031d4be9a91"
     },
     {
       "name": "701",

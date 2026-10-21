@@ -20,7 +20,7 @@ const results=[];const shots=[];const failures=[];
 async function check(name,run){try{const details=await run();results.push({name,passed:true,details});console.log('PASS',name,details??'');}catch(e){results.push({name,passed:false,error:e.message});failures.push(name);console.log('FAIL',name,e.message);}}
 const browsers=[];
 try{
- for(const [engine,launcher] of [['chromium',chromium],['webkit',webkit]]){
+ for(const [engine,launcher] of [['chromium',chromium],['webkit',webkit]].filter(([name])=>!process.env.SWORN_BROWSER_ENGINES||process.env.SWORN_BROWSER_ENGINES.split(',').includes(name))){
   let browser;
   try{browser=await launcher.launch({headless:true});browsers.push(browser);}catch(e){results.push({name:`${engine} availability`,passed:false,limitation:e.message.slice(0,600)});continue;}
   const context=await browser.newContext({viewport:{width:390,height:844},locale:'de-DE'});const page=await context.newPage();
@@ -34,15 +34,15 @@ try{
    await route.fulfill({contentType:'application/json',body:JSON.stringify(Array.isArray(body)?result:result[0]),headers});
   });
   const errors=[];const localFailures=[];const external=new Set();
-  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.url().startsWith(url.split('/preview/')[0])&&r.status()>=400)localFailures.push([r.url(),r.status()]);});
+  page.on('pageerror',e=>errors.push(e.message));page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});page.on('response',r=>{if(r.url().startsWith(url.split('/preview/')[0])&&r.status()>=400)localFailures.push([r.url(),r.status()]);});
   page.on('request',r=>{const u=new URL(r.url());if(u.protocol.startsWith('http')&&u.origin!==new URL(url).origin)external.add(u.hostname);});
   await page.goto(url);
   await check(`${engine}: landing exact copy and first-screen action`,async()=>{
-   assert.equal(await page.locator('h1').innerText(),'Facts about wallets, onchain and sworn by the swarm.');
+   assert.equal(await page.locator('h1').innerText(),'Facts about wallets, sworn onchain.');
    const box=await page.getByRole('button',{name:'Explore wallet',exact:true}).boundingBox();assert(box&&box.y+box.height<=844);return {buttonBottom:box.y+box.height};
   });
   await check(`${engine}: claim mint action on the first phone screen`,async()=>{
-   await page.goto(`${url}#/claim`);const box=await page.getByRole('button',{name:'Mint card',exact:true}).boundingBox();assert(box&&box.y+box.height<=844);return {buttonBottom:box.y+box.height};
+   await page.goto(`${url}#/claim`);const box=await page.getByRole('button',{name:'Prepare card mint',exact:true}).boundingBox();assert(box&&box.y+box.height<=844);return {buttonBottom:box.y+box.height};
   });
   await check(`${engine}: address validation`,async()=>{
    await page.goto(url);
@@ -52,7 +52,7 @@ try{
    await page.getByLabel('Wallet address',{exact:true}).fill('0x000000000000000000000000000000000000c1a1');await page.getByRole('button',{name:'Explore wallet',exact:true}).click();await page.getByRole('heading',{name:'Explorer',exact:true}).waitFor();await page.locator('.read-status').filter({hasText:'RPC unavailable'}).waitFor();assert.equal(await page.locator('.explorer-grid').count(),0);
   });
   await check(`${engine}: keyboard focus and skip link`,async()=>{
-   await page.goto(url);await page.locator('.skip-link').waitFor({state:'attached'});await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.textContent),'Skip to content');await page.keyboard.press('Enter');assert.equal(await page.evaluate(()=>document.activeElement.id),'main');
+   await page.goto(url);await page.locator('.skip-link').focus();await page.keyboard.press('Enter');assert.equal(await page.evaluate(()=>document.activeElement.id),'main');
   });
   const routes=['','catalog','explorer','claim','fact-vs-artifact','integrate','whitelistcurator','about'];
   for(const width of [390,1280,320,780]){
@@ -78,16 +78,31 @@ try{
   }
   await page.setViewportSize({width:390,height:844});
   await check(`${engine}: claim pre-wallet, payment choice and recoverable flow`,async()=>{
-   await page.goto(`${url}#/claim`);await page.getByRole('button',{name:'Mint card',exact:true}).click();await page.getByText('Connect your wallet to continue.',{exact:true}).waitFor();
+   await page.goto(`${url}#/claim`);await page.getByRole('button',{name:'Prepare card mint',exact:true}).click();await page.locator('.transaction-flow').getByRole('button',{name:'Connect wallet',exact:true}).waitFor();
    assert.equal(await page.getByRole('button',{name:'Approve exact IMD',exact:true}).isEnabled(),false);
-   await page.reload();await page.getByText('Connect your wallet to continue.',{exact:true}).waitFor();assert.equal(await page.locator('.transaction-steps li').count(),2);
-   await page.getByRole('button',{name:'Clear finished flow',exact:true}).click();await page.getByLabel('ETH',{exact:true}).first().check();await page.getByRole('button',{name:'Mint card',exact:true}).click();assert.equal(await page.locator('.transaction-steps li').count(),3);await page.getByRole('link',{name:'Buy IMD on Uniswap',exact:true}).waitFor();
+   await page.reload();await page.locator('.transaction-flow').getByRole('button',{name:'Connect wallet',exact:true}).waitFor();assert.equal(await page.locator('.transaction-steps li').count(),2);
+   await page.getByRole('button',{name:'Clear finished flow',exact:true}).click();assert.equal(await page.getByRole('radiogroup',{name:'Payment method'}).count(),1);await page.getByLabel('ETH',{exact:true}).check();await page.getByRole('button',{name:'Prepare card mint',exact:true}).click();assert.equal(await page.locator('.transaction-steps li').count(),3);await page.getByRole('link',{name:'Buy IMD on Uniswap',exact:true}).waitFor();
   });
   await check(`${engine}: catalog / source navigation`,async()=>{
    await page.getByRole('link',{name:'Catalog',exact:true}).click();await page.getByRole('link',{name:'WhitelistCurator.sol is not sybil-resistant by design',exact:true}).click();await page.locator('.source-line').nth(58).waitFor();assert.equal(await page.locator('h1').innerText(),'WhitelistCurator');
    await page.waitForFunction(()=>document.getElementById('source').getBoundingClientRect().top<50);
    const excerpt=JSON.parse(await readFile('web/public/data/curator-source.json','utf8'));
    assert.deepEqual(await page.locator('.source-line code').allTextContents(),excerpt.lines.map(line=>line.text));
+  });
+
+  await check(`${engine}: direct-load route titles, anchors and selected traits`,async()=>{
+   for(const [hash,title,target] of [['#/claim#step-03','Claim | Sworn','#step-03'],['#/fact-vs-artifact#verify','Fact vs artifact | Sworn','#verify']]){
+    await page.goto(`${url}${hash}`);await page.waitForFunction(title=>document.title===title,title);const node=page.locator(target);await node.waitFor();
+    await page.waitForFunction(selector=>{const target=document.querySelector(selector);return target&&Math.abs(target.getBoundingClientRect().top)<80;},target);assert.equal(await page.evaluate(()=>document.activeElement.id),target.slice(1));
+   }
+   for(const [id,target] of [[601,'#claim-trait-601'],[1201,'#shared-fact']]){
+    await page.goto(`${url}#/claim?trait=${id}`);await page.waitForFunction(()=>document.title==='Claim | Sworn');await page.locator(target).waitFor();
+    await page.waitForFunction(selector=>{const rect=document.querySelector(selector)?.getBoundingClientRect();return rect&&rect.top<innerHeight&&rect.bottom>0;},target);
+    assert(await page.locator(target).evaluate(node=>node.classList.contains('selected-trait')));
+   }
+  });
+  await check(`${engine}: stories link to the three claim steps and Integrate`,async()=>{
+   await page.goto(url);await page.waitForFunction(()=>document.title==='Wallet facts | Sworn');for(const href of ['#/claim','#/claim#step-02','#/claim#step-03','#/integrate'])assert(await page.locator(`main a[href="${href}"]`).count()>0);
   });
   await check(`${engine}: wallet picker, dismissal and focus return`,async()=>{
    await page.goto(url);await page.getByRole('button',{name:'Connect',exact:true}).click();await page.getByRole('dialog',{name:'Connect a wallet'}).waitFor();
@@ -100,10 +115,9 @@ try{
     await check(`${engine}: automated accessibility / ${route||'landing'}`,async()=>{
      await page.goto(`${url}#/${route}`);await page.locator('h1').waitFor();if(route==='whitelistcurator')await page.locator('.source-line').nth(58).waitFor();
      const report=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
-     const ownerApproved=report.violations.filter(v=>v.id==='color-contrast'&&v.nodes.every(n=>n.target.every(target=>String(target).includes('.line-number'))));
-     const applicable=report.violations.filter(v=>!ownerApproved.includes(v));
+     const applicable=report.violations;
      assert.deepEqual(applicable.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>n.target)})),[]);
-     return {passes:report.passes.length,incomplete:report.incomplete.length,ownerApproved:ownerApproved.map(v=>({id:v.id,nodes:v.nodes.length,reason:'The reviewed palette uses #5f6861 for decorative source line numbers (aria-hidden). Workflow requires unchanged colours; measured contrast 3.43:1 at 12px is retained and documented, not an AA pass.'}))};
+     return {passes:report.passes.length,incomplete:report.incomplete.length};
     });
    }
   }

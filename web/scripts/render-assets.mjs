@@ -24,13 +24,13 @@ function sourceCode(routes){
  return `0x${code}${headers.join('')}505f5ffd${handlers.join('')}${data.join('')}`;
 }
 const block=await client.getBlockNumber({cacheTime:0});
-const specs=new Map();for(const id of ids.filter(id=>id>=701))specs.set(id,await client.readContract({address:addr('Registry'),abi:registryAbi,functionName:'specOf',args:[id],blockNumber:block}));
+const specs=new Map();for(const id of ids.filter(id=>id>=601))specs.set(id,await client.readContract({address:addr('Registry'),abi:registryAbi,functionName:'specOf',args:[id],blockNumber:block}));
 mkdirSync('public/assets/traits',{recursive:true});const record={sourceCommit:config.sourceCommit,renderer:addr('Renderer'),block:String(block),source:config.network.rpcUrls[0],method:'Renderer.tokenURIOf via eth_call; ephemeral ICardSource code override for explicitly synthetic preview inputs',assets:[]};
 const jobs=[['sample-card',sample,'public/assets/sample-card.svg'],['empty',[],'public/assets/traits/empty.svg'],...ids.map(id=>[String(id),[id],`public/assets/traits/${id}.svg`])];
 for(const [name,traits,file] of jobs){
  const route=(fn,args,result)=>[encodeFunctionData({abi:registryAbi,functionName:fn,args}),encodeFunctionResult({abi:registryAbi,functionName:fn,result})];
  const routes=[route('claimantOf',[0n],wallet),route('traitsOf',[wallet],traits),route('verifiedSpecsOf',[wallet],[])];
- for(const id of traits.filter(id=>id>=701)){routes.push(route('verified',[wallet,id],['0x'+'0'.repeat(64),'0x'+'0'.repeat(64),0n,0n]));routes.push(route('specOf',[id],specs.get(id)));}
+ for(const id of traits.filter(id=>id>=601)){routes.push(route('verified',[wallet,id],['0x'+'0'.repeat(64),'0x'+'0'.repeat(64),0n,0n]));routes.push(route('specOf',[id],specs.get(id)));}
  const code=sourceCode(routes);
  const data=encodeFunctionData({abi:rendererAbi,functionName:'tokenURIOf',args:[addr('Registry'),0n]});
  const response=await client.call({to:addr('Renderer'),data,blockNumber:block,gas:16000000n,stateOverride:[{address:addr('Registry'),code}]});

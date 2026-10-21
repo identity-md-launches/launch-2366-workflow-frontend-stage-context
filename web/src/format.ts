@@ -7,6 +7,18 @@ export function units(value:bigint, decimals=18) {
  const [whole,fraction] = raw.split('.');
  return BigInt(whole).toLocaleString('en-US') + (fraction ? '.'+fraction : '');
 }
+/** IMD keeps exact precision; values below one show at least two decimal places. */
+export function imd(value:bigint) {
+ const formatted=units(value);
+ if(value>=10n**18n)return formatted;
+ const [whole,fraction='']=formatted.split('.');
+ return `${whole}.${fraction.padEnd(2,'0')}`;
+}
+/** Round the ETH commitment upward, so the six-decimal label never understates its wei. */
+export function ethMaximum(value:bigint) {
+ const scaled=(value+10n**12n-1n)/10n**12n;
+ return `${scaled/1000000n}.${(scaled%1000000n).toString().padStart(6,'0')}`;
+}
 export function attestationUrl(id:Hex|string) {
  if (!/^0x[0-9a-fA-F]{64}$/.test(id) || /^0x0+$/.test(id)) return undefined;
  const h=id.slice(2,34);

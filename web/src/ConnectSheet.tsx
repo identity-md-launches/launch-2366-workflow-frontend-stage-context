@@ -5,7 +5,7 @@ import {OPEN_IN} from './open-in';
 
 export function ConnectControl(){
  const w=useWallet(),a=w.wallet?.account;
- return <div className="connect-control">{a?<><button className="secondary" onClick={()=>w.wallet?.chainId!==1?void w.switchChain():void w.disconnect()}>{w.wallet?.chainId!==1?'Switch to Ethereum':`${getAddress(a).slice(0,6)}…${a.slice(-4)} · Disconnect`}</button></>:<button className="secondary" onClick={w.showConnect}>Connect</button>}</div>;
+ return <div className="connect-control">{a?<><button className="secondary" onClick={()=>w.wallet?.chainId!==1?void w.switchChain():void w.disconnect()}>{w.wallet?.chainId!==1?'Switch to Ethereum':`${getAddress(a).slice(0,6)}…${a.slice(-4)} · Disconnect`}</button></>:<button className="secondary" onClick={w.showConnect}>Connect</button>}{w.wallet&&w.message&&<p className="wallet-status error-text" role="status">{w.message}</p>}</div>;
 }
 export function ConnectSheet(){
  const w=useWallet();const dialog=useRef<HTMLDialogElement>(null);const opener=useRef<HTMLElement|null>(null);

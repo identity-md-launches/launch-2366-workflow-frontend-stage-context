@@ -4,7 +4,7 @@ The reviewed Sworn site, updated for the attested Ethereum mainnet deployment. S
 
 ## Install, build and preview
 
-Use Node 22.12+ (validated here with Node 24) and npm:
+Use Node 22.12+ (validated here with Node 26.11.1 and npm 12.2.0) and npm:
 
 ```sh
 cd web
@@ -12,6 +12,7 @@ npm ci
 npm test
 npm run typecheck
 npm run check:abi
+npm run check:deployment
 npm run build
 npm run check:export
 npm run preview
@@ -25,7 +26,7 @@ The build uses a relative Vite base and writes directly to `../dist/`. It prepar
 
 ## Reads and wallet actions
 
-Public reads use the handoff's Ethereum RPCs, selectable in the footer. Dependency getters, chain id and all three runtime hashes are checked before signing. No browser request is made to `api.imd.fun`; attestation URLs are links a visitor may open separately.
+Public reads use the handoff's Ethereum RPCs, selectable in the footer. Dependency getters, chain id and all three runtime hashes are checked before signing. Transient RPC errors retry automatically; the footer and affected read panels also offer explicit retry controls. No browser request is made to `api.imd.fun`; attestation URLs are links a visitor may open separately.
 
 One wallet picker supports EIP-6963 extensions, Coinbase Wallet/passkeys and four mobile in-wallet deep links. It needs no relay or project id. Wagmi stores the last authorized connector locally for reconnect; transaction intent and hashes are saved separately in session storage. Keys and signatures are not stored by this site. Each transaction requires an explicit wallet action; reload and receipt recovery never automatically resend a swap or approval.
 
@@ -40,15 +41,16 @@ Actual commands, results, review findings and unperformed checks are in [TEST-NO
 Optional browser tooling is installed outside the repository:
 
 ```sh
-npm install --prefix /tmp/sworn-browser playwright@1 @axe-core/playwright
-PLAYWRIGHT_BROWSERS_PATH=/tmp/sworn-pw /tmp/sworn-browser/node_modules/.bin/playwright install chromium webkit
+npm install --prefix /tmp/sworn-browser-tools --cache /tmp/sworn-npm-cache playwright@1 @axe-core/playwright
+PLAYWRIGHT_BROWSERS_PATH=/tmp/sworn-playwright-browsers /tmp/sworn-browser-tools/node_modules/.bin/playwright install chromium --only-shell
+PLAYWRIGHT_BROWSERS_PATH=/tmp/sworn-playwright-browsers /tmp/sworn-browser-tools/node_modules/.bin/playwright install webkit
 # From repository root:
-PLAYWRIGHT_BROWSERS_PATH=/tmp/sworn-pw \
-IMD_PLAYWRIGHT=/tmp/sworn-browser/node_modules/playwright/index.mjs \
-SWORN_AXE_MODULE=/tmp/sworn-browser/node_modules/@axe-core/playwright/dist/index.mjs \
+PLAYWRIGHT_BROWSERS_PATH=/tmp/sworn-playwright-browsers \
+IMD_PLAYWRIGHT=/tmp/sworn-browser-tools/node_modules/playwright/index.mjs \
+SWORN_AXE_MODULE=/tmp/sworn-browser-tools/node_modules/@axe-core/playwright/dist/index.mjs \
 node web/tests/browser.mjs
 ```
 
-`web/tests/live-browser.mjs` adds live Explorer and simulated-provider wallet checks; `web/tests/fork.mts` tests local-only transactions against a mainnet fork with Anvil. Optional `SWORN_RPC`/`SWORN_FORK_RPC` select an operator transport for those tests, without changing the exported public network configuration. Never point a transaction test at a funded mainnet signer. Shared-fact application still needs a real accepted attested list and is checked by ABI/unit validation rather than a fabricated mainnet verdict.
+`web/tests/wallet-browser.mjs` checks wallet discovery, rejection, switching and phone presentation. `web/tests/site-browser.mjs` checks the connected Claim/Explorer UI with explicit deterministic protocol fixtures. `web/tests/live-browser.mjs` adds live public-RPC reads and actual outage/recovery checks; `web/tests/fork.mts` tests local-only transactions against a mainnet fork with Anvil. Optional `SWORN_RPC`/`SWORN_FORK_RPC` select an operator transport for those tests, without changing the exported public network configuration. Never point a transaction test at a funded mainnet signer. Shared-fact application still needs a real accepted attested list and is checked by ABI/unit validation rather than a fabricated mainnet verdict.
 
 The production build emits nonfatal third-party Rollup annotation/chunk-size warnings from the wallet dependencies. Required runtime files remain bundled; dependencies, caches, browser binaries and registry archives are not part of the delivery.

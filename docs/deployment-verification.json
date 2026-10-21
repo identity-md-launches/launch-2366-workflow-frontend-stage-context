@@ -1,34 +1,72 @@
 {
-  "sourceCommit": "832cc45f59acdda805b51799647be24c0cae9741",
-  "compiler": "solc 0.8.24, optimizer 200, cancun, bytecode_hash none, cbor_metadata false",
+  "checkedAt": "2026-10-21T06:07:08.789Z",
+  "sourceCommit": "e462b062e68c0962a15d05cfe7d70dacbb354cbd",
+  "attestationHash": "bbe3ff03a37e92a5d34cd92811cb32e1ddda5c174cafdf99c99c9d318b3d86c2",
   "chainId": 1,
   "source": "https://ethereum-rpc.publicnode.com",
+  "checkedBlock": "26239071",
+  "compiler": "solc 0.8.24, optimizer 200, cancun, bytecode_hash none, cbor_metadata false",
   "contracts": [
     {
       "name": "Renderer",
-      "address": "0x4c7fe2202b29c23b54bd45053a6c88061f1296ef",
+      "txHash": "0xa24493a1b74bb47458eb7dc772269d791a083d3851da8f0e79d4075dd2362e52",
       "abiHash": "8640b90944cafb0e12b374feaeba3705ae0f27adf629c8f6600c955b024e86e5",
-      "runtimeHash": "0xf17b2f216bb8308110f7b649c7c0acd8bfbd81c235fb4423569d2160d3756a6b",
-      "runtimeBytes": 23092,
-      "compiledRuntimeMatches": true
+      "address": "0x8309e5734cb8df4139878c74e2114a87ebc2af5c",
+      "blockNumber": 26239042,
+      "creationCodeHash": "099b43b4b6c1feaf66fc129ba5b4f97dac33a92bad68c10852edcd836c4c8c0f",
+      "abiPath": "abi/Renderer.json",
+      "abiSourcePath": "docs/abi/Renderer.json",
+      "abiSourceSha256": "ae8d4aae4cb4ffc1e007cb25553480edf2bba4127dafceb28bd59e841cb2217c",
+      "runtimeHash": "0x87eaea63e4bb92d2f0da4f1093f8cd4e67d45766f711aea098cbb0dbfd1b6caa",
+      "runtimeBytes": 23553,
+      "compiledRuntimeMatches": true,
+      "nonemptyCode": true
     },
     {
       "name": "Composer",
-      "address": "0x1d7da5353830248b042fc1396d5d12c31ac69824",
-      "abiHash": "d39a38c125748e55e0a60bbc3e73422e0f350edf5739003760c7ada4f35636bd",
-      "runtimeHash": "0x19d1b889059013126fe03ef4b0a36e578f2eec64798f9da774d59d69fa012cce",
-      "runtimeBytes": 23621,
-      "compiledRuntimeMatches": true
+      "txHash": "0xa24493a1b74bb47458eb7dc772269d791a083d3851da8f0e79d4075dd2362e52",
+      "abiHash": "904973ee8f167bdc765126cb963a5bbe2db1d6b44ec68daed76e6182b69a337f",
+      "address": "0xae4b30f656be1069748c351aecf396a99253ee9c",
+      "blockNumber": 26239042,
+      "creationCodeHash": "d51c85f63a2d1d8e711c091e492338a020654e24467d7ccecdcb4c4fb503a99d",
+      "abiPath": "abi/Composer.json",
+      "abiSourcePath": "docs/abi/Composer.json",
+      "abiSourceSha256": "d22cce74efeb551c933c256ae2aa3973859a8269dbb93934f8972ebc81082b2f",
+      "runtimeHash": "0x7dfc0cea1c5cd3d69cb48300f993d06a1bcaf7829cb821db1938261628d05322",
+      "runtimeBytes": 24068,
+      "compiledRuntimeMatches": true,
+      "nonemptyCode": true
     },
     {
       "name": "Registry",
-      "address": "0xdd0017e40f1a5fe514d15d108ce01eb52f2a5edb",
-      "abiHash": "738fb51a8bcbfff26ff21f203b1a190b414fc8ba7678d72e8b3a91721da13862",
-      "runtimeHash": "0x1c9210de6ffd1eda2ace94bc9459038c3a698701686997ef4704d20282be18ba",
-      "runtimeBytes": 22943,
-      "compiledRuntimeMatches": true
+      "txHash": "0xa24493a1b74bb47458eb7dc772269d791a083d3851da8f0e79d4075dd2362e52",
+      "abiHash": "183dc3d205cd46ac796625fb97016dae68923f81f0253b3373003447c78393fb",
+      "address": "0x9cb36ecca47d753e4e62ed87c12a2b7b20dfa828",
+      "blockNumber": 26239042,
+      "creationCodeHash": "c308951bffac6efbd77ffef3a07077c04bf4a8dbb8e6b1fc787640647f93aec1",
+      "abiPath": "abi/Registry.json",
+      "abiSourcePath": "docs/abi/Registry.json",
+      "abiSourceSha256": "5801494ea02c8022592863219a290781690e2f1c735e8138c73e9ab9c9afa744",
+      "runtimeHash": "0x3830b10816d6b205ff71c5f7cb3081d7360c21295fdb1b55db0656f464b1b32c",
+      "runtimeBytes": 20465,
+      "compiledRuntimeMatches": true,
+      "nonemptyCode": true
     }
   ],
-  "deploymentDate": "2026-10-20",
-  "deploymentBlockHash": "0x8ac4810b696e28fa4854ba9416777d425651793995a5781096a0a0c25f0d2036"
+  "getters": {
+    "curator": "0xcB0b0531e86A9aC36Fa865cA8e3dbccF047FDA91",
+    "imd": "0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7",
+    "intake": "0xa43e6F75ee006411F79Ac1C84120606C2330DE82",
+    "attester": "0x5598Aa9146215Bc13eb26f2c692Ad1461Fd32982",
+    "renderer": "0x8309E5734Cb8Df4139878C74e2114A87Ebc2aF5C",
+    "composer": "0xaE4b30f656bE1069748c351aECf396A99253ee9c",
+    "burnExecutor": "0xe29386719C155B6847aD5a4E97C6674f10ffc750"
+  },
+  "deploymentDate": "2026-10-21",
+  "deploymentBlockHash": "0x043d30cd507f92c3150b3a4e3aa80025d2348a6774bd7b70d2b2edd4d83d3be9",
+  "previewStorage": {
+    "mapping": "claimantOf",
+    "slot": 15,
+    "derivation": "forge inspect src/Registry.sol:Registry storage-layout --json --offline --use /tmp/sworn-solc-v0.8.24 --out test/scratch/solidity-out --cache-path test/scratch/solidity-cache; solc 0.8.24 at pinned source"
+  }
 }

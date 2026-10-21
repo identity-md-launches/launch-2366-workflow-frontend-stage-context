@@ -26,11 +26,24 @@ test('paid request and registration selectors pin maxPrice and expectedId',()=>{
  assert.deepEqual(decodeFunctionData({abi:registryAbi,data}).args,[[601],cap]);
  const spec=registryAbi.find(x=>x.type==='function'&&x.name==='registerSpec');assert(spec?.type==='function');assert.equal(spec.inputs[1].name,'expectedId');
 });
+test('downloaded integration examples use this deployment Registry',()=>{
+ const registry=deployment.contracts.find(c=>c.name==='Registry')!.address;
+ for(const file of ['SwornGate.sol','read-registry.sh']){
+  const source=readFileSync(new URL(`../public/examples/${file}`,import.meta.url),'utf8');
+  assert(source.toLowerCase().includes(registry.toLowerCase()));
+  assert(!source.toLowerCase().includes('0xdd0017e40f1a5fe514d15d108ce01eb52f2a5edb'));
+ }
+});
 test('Swarmed is a panel fact with a living request window',()=>{
  const trait=CATALOG.find(t=>t.id===601)!;assert.equal(trait.name,'Swarmed');assert.equal(trait.evidence,'panel');assert(trait.window.includes('64'));
- const pages=readFileSync(new URL('../src/pages.tsx',import.meta.url),'utf8');
- assert(pages.includes('An earlier deployment (Registry 0x39bec764…95a6, swarm launch #2147, 2026-10-18) was a test, never announced; this registry replaced it on 2026-10-20.'));
+});
+test('About records both earlier deployments and the verified current deployment date',()=>{
+ const pages=readFileSync(new URL('../src/pages.tsx',import.meta.url),'utf8'),evidence=json('../../docs/deployment-verification.json');
+ assert(pages.includes('Registry 0x39bec764…95a6, swarm launch #2147, 2026-10-18'));
+ assert(pages.includes('Registry 0xdd0017e4…5edb, swarm launch #2341, 2026-10-20'));
+ assert(pages.includes(`This registry replaced both on ${evidence.deploymentDate}.`));
  assert.equal((pages.match(/39bec764/gi)??[]).length,1);
+ assert.equal((pages.match(/dd0017e4/gi)??[]).length,1);
 });
 test('shipped card SVGs have no token-id text and match the live-render evidence',()=>{
  const evidence=json('../../docs/renderer-assets.json');

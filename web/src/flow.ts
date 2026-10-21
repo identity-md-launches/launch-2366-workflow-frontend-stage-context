@@ -6,10 +6,10 @@ import { quoteExactImd, swapCalldata, type SwapQuote } from './swap';
 import { units } from './format';
 import { CHAIN_IDS } from './catalog';
 
-export type Plan={key:string;label:string;data:Hex;amount:bigint;maxPrice?:bigint;spec?:boolean;shared?:boolean};
+export type Plan={key:string;label:string;data:Hex;amount:bigint;maxPrice?:bigint;spec?:boolean;shared?:boolean;origin?:string;facts?:{id:number;name:string;price:string}[];firstClaimPrice?:string};
 export type Phase='swap'|'approve'|'registry';
 export type StepState='ready'|'awaiting wallet'|'pending'|'confirmed'|'rejected'|'failed'|'replaced'|'unknown';
-export type Journal={version:1;deploymentId:string;key:string;label:string;data:Hex;amount:string;maxPrice?:string;spec?:boolean;payment:'IMD'|'ETH';steps:Partial<Record<Phase,{state:StepState;hash?:Hex;data?:Hex;to?:Address;value?:string}>>;registeredId?:number;outcomes?:string[]};
+export type Journal={version:1;deploymentId:string;key:string;label:string;data:Hex;amount:string;maxPrice?:string;spec?:boolean;payment:'IMD'|'ETH';origin?:string;facts?:{id:number;name:string;price:string}[];firstClaimPrice?:string;steps:Partial<Record<Phase,{state:StepState;hash?:Hex;data?:Hex;to?:Address;value?:string;error?:string}>>;registeredId?:number;outcomes?:string[]};
 const JOURNAL_KEY='sworn.transaction.'+deployment.launchId;
 export function loadJournal():Journal|undefined {
  try {
@@ -22,7 +22,7 @@ export function loadJournal():Journal|undefined {
 }
 export function saveJournal(j:Journal){sessionStorage.setItem(JOURNAL_KEY,JSON.stringify(j));}
 export function clearJournal(){sessionStorage.removeItem(JOURNAL_KEY);}
-export function newJournal(plan:Plan,payment:'IMD'|'ETH'):Journal {return {version:1,deploymentId:deployment.launchId,key:plan.key,label:plan.label,data:plan.data,amount:plan.amount.toString(),maxPrice:plan.maxPrice?.toString(),spec:plan.spec,payment,steps:{}};}
+export function newJournal(plan:Plan,payment:'IMD'|'ETH'):Journal {return {version:1,deploymentId:deployment.launchId,key:plan.key,label:plan.label,data:plan.data,amount:plan.amount.toString(),maxPrice:plan.maxPrice?.toString(),spec:plan.spec,origin:plan.origin,facts:plan.facts,firstClaimPrice:plan.firstClaimPrice,payment,steps:{}};}
 export function validateIntent(journal:Journal){
  const call=decodeFunctionData({abi:registryAbi,data:journal.data});
  const args=call.args as readonly unknown[]|undefined;
@@ -129,7 +129,7 @@ export async function confirmStep(client:Reader,wallet:Wallet,journal:Journal,ph
  entry.state='confirmed';saveJournal(journal);update({...journal},phase==='registry'?'Registry transaction confirmed. Read the receipt outcomes below.':'Receipt confirmed. Continue to the next step.');
  return receipt;
 }
-export async function runStep(client:Reader,wallet:Wallet,journal:Journal,phase:Phase,update:Update,quote?:SwapQuote) {
+async function performStep(client:Reader,wallet:Wallet,journal:Journal,phase:Phase,update:Update,quote?:SwapQuote) {
  validateIntent(journal);
  await assertWallet(wallet);await integrity(client,true);
  if(journal.steps[phase]?.state==='confirmed')throw new Error('This step is already confirmed.');
@@ -176,6 +176,21 @@ export async function runStep(client:Reader,wallet:Wallet,journal:Journal,phase:
    const code=(error as {code?:number}).code;
    entry.state=code===4001 || /reject|denied/i.test(String(error)) ? 'rejected' : 'unknown';
    saveJournal(journal);update({...journal});
+  }
+  throw error;
+ }
+}
+
+/** Persist preflight failures beside the affected step without losing a broadcast hash. */
+export async function runStep(client:Reader,wallet:Wallet,journal:Journal,phase:Phase,update:Update,quote?:SwapQuote) {
+ try {
+  if(journal.steps[phase])delete journal.steps[phase]!.error;
+  return await performStep(client,wallet,journal,phase,update,quote);
+ } catch(error) {
+  const entry=journal.steps[phase]??{state:'failed' as StepState};
+  if(entry.state!=='confirmed'){
+   if(!entry.hash&&!['unknown','awaiting wallet','rejected'].includes(entry.state))entry.state='failed';
+   entry.error=friendlyError(error);journal.steps[phase]=entry;saveJournal(journal);update({...journal});
   }
   throw error;
  }

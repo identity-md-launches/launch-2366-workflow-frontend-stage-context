@@ -12,7 +12,7 @@ export async function withRpc<T>(selected:string, run:(client:Reader)=>Promise<T
  for (const url of [selected,...A.publicRpcs.filter(u=>u!==selected)]) {
   try {
    const client=rpcClient(url);
-   if (await client.getChainId()!==1) continue;
+   if (await client.getChainId()!==A.chainId) continue;
    return await run(client);
   } catch(error) { if(error instanceof DeploymentMismatch) throw error; }
  }
@@ -25,6 +25,7 @@ export const reg = <T>(c:Reader, fn:string,args:readonly unknown[]=[],blockNumbe
 export type Integrity = {block:bigint; getters:Record<string,string>; endpoint:string};
 const integrityCache=new Map<string,{at:number;result:Integrity}>();
 export async function integrity(client:Reader,force=false):Promise<Integrity> {
+ if(await client.getChainId()!==A.chainId)throw new DeploymentMismatch('RPC chain differs from the deployment. Transactions are disabled.');
  const endpoint=client.transport.url??'';
  const cached=integrityCache.get(endpoint);
  if(!force&&cached&&Date.now()-cached.at<60000)return cached.result;
@@ -32,10 +33,10 @@ export async function integrity(client:Reader,force=false):Promise<Integrity> {
  const names=['curator','imd','intake','renderer','composer','burnExecutor','attester'];
  const expected=[A.WhitelistCurator,A.IMD,A.IntakeV2,A.Renderer,A.Composer,A.BurnExecutorV2,A.attester];
  const values=await Promise.all(names.map(fn=>reg<string>(client,fn,[],block)));
- names.forEach((fn,i)=>{if(values[i].toLowerCase()!==expected[i].toLowerCase()) throw new DeploymentMismatch(`${fn}() differs from site/addresses.json. Transactions are disabled.`);});
+ names.forEach((fn,i)=>{if(values[i].toLowerCase()!==expected[i].toLowerCase()) throw new DeploymentMismatch(`${fn}() differs from the configured deployment dependencies. Transactions are disabled.`);});
  await Promise.all((['Registry','Renderer','Composer'] as const).map(async name=>{
   const code=await client.getCode({address:address(name),blockNumber:block});
-  if (!code || keccak256(code)!==A.runtimeHashes[name]) throw new DeploymentMismatch(`${name} deployed code differs from the launch source. Transactions are disabled.`);
+  if (!code || code==='0x' || keccak256(code)!==A.runtimeHashes[name]) throw new DeploymentMismatch(`${name} deployed code differs from the launch source. Transactions are disabled.`);
  }));
  const result={block,getters:Object.fromEntries(names.map((fn,i)=>[fn,values[i]])),endpoint};
  integrityCache.set(endpoint,{at:Date.now(),result});return result;

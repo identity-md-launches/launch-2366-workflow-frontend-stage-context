@@ -19,8 +19,8 @@
     "hooks": "0xc6c965bd164c483e87d0b550671798e9a3602840"
   },
   "runtimeHashes": {
-    "Renderer": "0xf17b2f216bb8308110f7b649c7c0acd8bfbd81c235fb4423569d2160d3756a6b",
-    "Composer": "0x19d1b889059013126fe03ef4b0a36e578f2eec64798f9da774d59d69fa012cce",
-    "Registry": "0x1c9210de6ffd1eda2ace94bc9459038c3a698701686997ef4704d20282be18ba"
+    "Renderer": "0x87eaea63e4bb92d2f0da4f1093f8cd4e67d45766f711aea098cbb0dbfd1b6caa",
+    "Composer": "0x7dfc0cea1c5cd3d69cb48300f993d06a1bcaf7829cb821db1938261628d05322",
+    "Registry": "0x3830b10816d6b205ff71c5f7cb3081d7360c21295fdb1b55db0656f464b1b32c"
   }
 }

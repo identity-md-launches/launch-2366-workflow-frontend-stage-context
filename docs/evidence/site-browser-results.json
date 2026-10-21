@@ -1,0 +1,140 @@
+{
+  "exportManifestSha256": "c36c1365e1476e999fa64d46e58639aedce4d83de04b12524f84faa250fd155b",
+  "results": [
+    {
+      "name": "F28: non-Curator facts are refused and only eligible oracle facts remain requestable",
+      "passed": true,
+      "details": {
+        "nonCurator": 701,
+        "requestable": 601
+      }
+    },
+    {
+      "name": "F30: one oracle acknowledgement remains adjacent to its first button and its reason focuses it",
+      "passed": true,
+      "details": {
+        "verticalSpan": 189.5625
+      }
+    },
+    {
+      "name": "F35/F29: preparing a fact names its subject, exact price and originating step; preflight failures stay local",
+      "passed": true
+    },
+    {
+      "name": "F29/F27: invalid spec reports by its button and registration reads the current oracle price on click",
+      "passed": true
+    },
+    {
+      "name": "F31: a connected minted wallet shows its own card and disables mint",
+      "passed": true
+    },
+    {
+      "name": "F23/F28: unminted Explorer keeps its card preview and omits impossible request links",
+      "passed": true
+    },
+    {
+      "name": "F32: every rendered data table fits 390px without sideways scrolling",
+      "passed": true,
+      "details": [
+        {
+          "label": "13-family wallet summary",
+          "width": 358,
+          "scroll": 358
+        },
+        {
+          "label": "Every hasTrait result",
+          "width": 358,
+          "scroll": 358
+        },
+        {
+          "label": "Requestable oracle facts",
+          "width": 358,
+          "scroll": 358
+        }
+      ]
+    },
+    {
+      "name": "F33: direct-load claim traits and shared block are visible and highlighted",
+      "passed": true
+    },
+    {
+      "name": "F26: outage and recovery restore transaction guards without a reload",
+      "passed": true
+    },
+    {
+      "name": "F25: Explorer displays the accepted Swarmed window without recomputing it",
+      "passed": true
+    },
+    {
+      "name": "F28/F31: desktop non-Curator guards and minted-wallet preview match the phone",
+      "passed": true
+    },
+    {
+      "name": "F47: both integration examples copy their complete text",
+      "passed": true
+    },
+    {
+      "name": "F32/F36: catalog, comparison and claim table bodies fit the phone",
+      "passed": true,
+      "details": [
+        {
+          "route": "catalog",
+          "label": "Direct facts: catalog rows",
+          "width": 358,
+          "scroll": 358
+        },
+        {
+          "route": "catalog",
+          "label": "Chain-proven facts: catalog rows",
+          "width": 358,
+          "scroll": 358
+        },
+        {
+          "route": "catalog",
+          "label": "Shared facts: catalog rows",
+          "width": 358,
+          "scroll": 358
+        },
+        {
+          "route": "catalog",
+          "label": "Panel facts: catalog rows",
+          "width": 358,
+          "scroll": 358
+        },
+        {
+          "route": "catalog",
+          "label": "Community traits",
+          "width": 358,
+          "scroll": 358
+        },
+        {
+          "route": "catalog",
+          "label": "Canonical block windows",
+          "width": 358,
+          "scroll": 358
+        },
+        {
+          "route": "fact-vs-artifact",
+          "label": "Fact and card comparison",
+          "width": 358,
+          "scroll": 358
+        },
+        {
+          "route": "claim",
+          "label": "Oracle facts",
+          "width": 358,
+          "scroll": 358
+        }
+      ]
+    },
+    {
+      "name": "protocol fixtures, page errors and transaction isolation",
+      "passed": true,
+      "details": {
+        "pageErrors": [],
+        "unsupportedRpc": [],
+        "transactionBroadcasts": 0
+      }
+    }
+  ]
+}

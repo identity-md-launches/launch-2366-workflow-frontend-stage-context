@@ -13,7 +13,7 @@ const mintData=encodeFunctionData({abi:registryAbi,functionName:'mintCard'});
 const amount=100000000000000000n;
 function mock(){
  const memory=new Map<string,string>();Object.defineProperty(globalThis,'sessionStorage',{configurable:true,value:{getItem:(k:string)=>memory.get(k)??null,setItem:(k:string,v:string)=>memory.set(k,v),removeItem:(k:string)=>memory.delete(k)}});
- const state={sent:0,reject:false,broadcastUnknown:false,wait:'success',amount:0n,fee:100n,failPreview:false,allowance:amount,tokenId:0n,verified:false,pending:hash('0'),logs:[] as unknown[],abortDuringEstimate:undefined as (()=>void)|undefined};
+ const state={sent:0,reject:false,broadcastUnknown:false,wait:'success',amount:0n,fee:100n,failPreview:false,balance:10n**19n,simulationError:false,allowance:amount,tokenId:0n,verified:false,pending:hash('0'),logs:[] as unknown[],abortDuringEstimate:undefined as (()=>void)|undefined};
  let transaction={from:SYNTHETIC,to:A.IMD as Address,input:'0x' as Hex,value:0n};
  const controller=new AbortController();
  const wallet:Wallet={account:SYNTHETIC,chainId:1,epoch:1,signal:controller.signal,provider:{request:async({method,params})=>{
@@ -28,13 +28,13 @@ function mock(){
  }}};
  const getters:Record<string,string>={curator:A.WhitelistCurator,imd:A.IMD,intake:A.IntakeV2,renderer:A.Renderer,composer:A.Composer,burnExecutor:A.BurnExecutorV2,attester:A.attester};
  const client={
-  transport:{url:'test:synthetic-transport'},getBlockNumber:async()=>26217852n,
+  transport:{url:'test:synthetic-transport'},getChainId:async()=>1,getBlockNumber:async()=>26217852n,
   getCode:async({address}:{address:string})=>{const name=(['Registry','Renderer','Composer'] as const).find(n=>A[n]===address.toLowerCase());if(!name)throw Error('Unexpected code address');return runtime[name];},
-  readContract:async({functionName}:{functionName:string})=>functionName in getters?getters[functionName]:functionName==='balanceOf'?10n**19n:functionName==='allowance'?state.allowance:functionName==='priceOf'?500000000000000000n:functionName==='tokenOf'?state.tokenId:functionName==='hasTrait'?state.verified:functionName==='pendingOf'?state.pending:0n,
+  readContract:async({functionName}:{functionName:string})=>functionName in getters?getters[functionName]:functionName==='balanceOf'?state.balance:functionName==='allowance'?state.allowance:functionName==='priceOf'?500000000000000000n:functionName==='tokenOf'?state.tokenId:functionName==='hasTrait'?state.verified:functionName==='pendingOf'?state.pending:0n,
   call:async({to}:{to:string})=>{
    return {data:'0x'};
   },
-  simulateContract:async()=>({}),estimateGas:async()=>{state.abortDuringEstimate?.();return 200000n;},
+  simulateContract:async()=>{if(state.simulationError)throw Error('Simulation refused the operation');return {};},estimateGas:async()=>{state.abortDuringEstimate?.();return 200000n;},
   waitForTransactionReceipt:async({onReplaced}:{onReplaced?:(value:unknown)=>void})=>{
    if(state.wait==='timeout')throw Error('Timed out waiting for a receipt');
    const receipt={status:state.wait==='reverted'?'reverted':'success',transactionHash:hash(state.wait==='repriced'||state.wait==='cancelled'?'2':'1'),logs:state.logs};
@@ -106,3 +106,27 @@ test('a changed live oracle price stops the flow before buying or approving',asy
 });
 
 test('Registry payment uses zero native value',async()=>{const m=mock();await runStep(m.client,m.wallet,m.journal,'approve',()=>{});await runStep(m.client,m.wallet,m.journal,'registry',()=>{});assert.equal(m.journal.steps.registry?.value,'0');});
+
+test('insufficient IMD is reported before any wallet prompt',async()=>{
+ const m=mock();m.state.balance=amount-1n;await assert.rejects(runStep(m.client,m.wallet,m.journal,'approve',()=>{}),/Insufficient IMD/);
+ assert.equal(m.state.sent,0);assert.equal(m.journal.steps.approve?.state,'failed');assert.match(m.journal.steps.approve?.error??'',/Insufficient IMD/);
+});
+test('an exact approval with a mismatched live allowance cannot advance',async()=>{
+ const m=mock();m.state.allowance=amount+1n;await assert.rejects(runStep(m.client,m.wallet,m.journal,'approve',()=>{}),/Exact allowance check failed/);
+ assert.notEqual(m.journal.steps.approve?.state,'confirmed');assert.equal(m.journal.steps.registry,undefined);assert.equal(m.state.sent,1);
+});
+test('an ETH-paid flow cannot approve until its exact swap receipt is confirmed',async()=>{
+ const m=mock();const journal=newJournal({key:'mint',label:'Synthetic ETH mint',data:mintData,amount},'ETH');
+ await assert.rejects(runStep(m.client,m.wallet,journal,'approve',()=>{}),/Confirm the swap receipt first/);assert.equal(m.state.sent,0);
+});
+test('an incorrect swap receipt never enables approval or a Registry call',async()=>{
+ const m=mock();const journal=newJournal({key:'mint',label:'Synthetic ETH mint',data:mintData,amount},'ETH');
+ const quote={amountOut:amount,amountIn:100n,maxInput:101n,quotedAt:Date.now(),block:26239042n,poolId};
+ await assert.rejects(runStep(m.client,m.wallet,journal,'swap',()=>{},quote),/Exact IMD receipt check failed/);
+ assert.notEqual(journal.steps.swap?.state,'confirmed');assert.equal(journal.steps.approve,undefined);assert.equal(journal.steps.registry,undefined);assert.equal(m.state.sent,1);
+});
+test('a Registry simulation failure is saved on its step before opening the wallet',async()=>{
+ const m=mock();await runStep(m.client,m.wallet,m.journal,'approve',()=>{});m.state.simulationError=true;
+ await assert.rejects(runStep(m.client,m.wallet,m.journal,'registry',()=>{}),/Simulation refused/);
+ assert.equal(m.state.sent,1);assert.equal(m.journal.steps.registry?.state,'failed');assert.match(m.journal.steps.registry?.error??'',/Simulation refused/);
+});

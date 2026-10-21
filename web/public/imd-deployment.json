@@ -1,26 +1,26 @@
 {
   "version": 1,
-  "launchId": "881ffed7-e6bd-49ef-9fbf-68568982f4b8",
+  "launchId": "7f4dd9ec-15e4-4062-8b94-9d1a859513cd",
   "chainId": 1,
-  "sourceCommit": "832cc45f59acdda805b51799647be24c0cae9741",
-  "attestationHash": "6f1921270b3db68384c0bed0013534fa41fe6baa6cb301e8a62accdc8fc96f71",
+  "sourceCommit": "e462b062e68c0962a15d05cfe7d70dacbb354cbd",
+  "attestationHash": "bbe3ff03a37e92a5d34cd92811cb32e1ddda5c174cafdf99c99c9d318b3d86c2",
   "contracts": [
     {
       "name": "Renderer",
-      "address": "0x4c7fe2202b29c23b54bd45053a6c88061f1296ef",
+      "address": "0x8309e5734cb8df4139878c74e2114a87ebc2af5c",
       "abiHash": "8640b90944cafb0e12b374feaeba3705ae0f27adf629c8f6600c955b024e86e5",
       "abiPath": "abi/Renderer.json"
     },
     {
       "name": "Composer",
-      "address": "0x1d7da5353830248b042fc1396d5d12c31ac69824",
-      "abiHash": "d39a38c125748e55e0a60bbc3e73422e0f350edf5739003760c7ada4f35636bd",
+      "address": "0xae4b30f656be1069748c351aecf396a99253ee9c",
+      "abiHash": "904973ee8f167bdc765126cb963a5bbe2db1d6b44ec68daed76e6182b69a337f",
       "abiPath": "abi/Composer.json"
     },
     {
       "name": "Registry",
-      "address": "0xdd0017e40f1a5fe514d15d108ce01eb52f2a5edb",
-      "abiHash": "738fb51a8bcbfff26ff21f203b1a190b414fc8ba7678d72e8b3a91721da13862",
+      "address": "0x9cb36ecca47d753e4e62ed87c12a2b7b20dfa828",
+      "abiHash": "183dc3d205cd46ac796625fb97016dae68923f81f0253b3373003447c78393fb",
       "abiPath": "abi/Registry.json"
     }
   ],

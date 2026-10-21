@@ -1,7 +1,11 @@
 {
-  "regularFiles": 316,
-  "regularFileBytes": 5118298,
-  "gzipSnapshotBytes": 1618618,
+  "regularFiles": 366,
+  "regularFileBytes": 6515980,
+  "reportBytes": 610,
+  "gzipSnapshotBytesExcludingThisReport": 2592447,
+  "gzipSnapshotSha256ExcludingThisReport": "8ab4c200f2c8f5ebe998dc22234f21e13f22ee64ada78399627b0bb68e67e7a0",
   "limitBytes": 8388608,
-  "note": "Conservative regular-file snapshot check; the publisher builds the final Git submission bundle."
+  "noDependencyOrCacheCandidates": true,
+  "allChangesWithinAssignedPaths": true,
+  "note": "Complete candidate regular files include this report. The compressed snapshot excludes this report to avoid recursive measurements. Existing protected Git links are unchanged; no new submodule is added. The publisher assembles the final Git bundle."
 }

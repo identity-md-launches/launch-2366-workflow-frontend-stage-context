@@ -1,10 +1,11 @@
 import dependencies from '../dependencies.json';
-import { keccak256, toHex, parseAbi, stringToHex, type Address, type Abi } from 'viem';
+import { isAddress, keccak256, toHex, parseAbi, stringToHex, type Address, type Abi } from 'viem';
 
 export type Deployment = {
  version:1; launchId:string; chainId:number; sourceCommit:string; attestationHash:string;
  contracts:{name:string;address:Address;abiHash:string;abiPath:string}[];
  assets:{path:string;sha256:string}[];
+ poolKey?:{currency0:Address;currency1:Address;fee:number;tickSpacing:number;hooks:Address};
  network:{chainId:number;name:string;rpcUrls:string[];explorer:string;nativeCurrency:{name:string;symbol:string;decimals:number}};
  walletAddChain?:{chainId:string;chainName:string;rpcUrls:string[];nativeCurrency:{name:string;symbol:string;decimals:number};blockExplorerUrls:string[]};
 };
@@ -14,17 +15,19 @@ export let registryAbi:Abi, rendererAbi:Abi, composerAbi:Abi;
 export let REPO:string, LAUNCH:string, EXPLORER:string;
 export const canonical=(value:unknown):unknown=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical((value as Record<string,unknown>)[key])])):value;
 export const abiHash=(abi:Abi)=>keccak256(toHex(JSON.stringify(canonical(abi)))).slice(2);
+export const validAssetPath=(path:unknown):path is string=>typeof path==='string'&&path.length>0&&!path.startsWith('/')&&!path.includes('..')&&!path.includes(':')&&!path.includes('\\')&&!path.includes('?')&&!path.includes('#');
 export function configureRuntime(config:Deployment, abis:Record<string,Abi>){
  if(config.version!==1||config.chainId!==config.network.chainId||config.chainId!==1)throw Error('Deployment network mismatch.');
- if(config.contracts.length!==3||new Set(config.contracts.map(c=>c.name)).size!==3)throw Error('Unexpected deployment contract set.');
- const contract=(name:string)=>{const c=config.contracts.find(c=>c.name===name);if(!c||abiHash(abis[name])!==c.abiHash)throw Error(`${name} ABI differs from the attested deployment.`);return c.address;};
+ if(config.contracts.length!==3||new Set(config.contracts.map(c=>c.name)).size!==3||config.contracts.some(c=>!['Registry','Renderer','Composer'].includes(c.name)))throw Error('Unexpected deployment contract set.');
+ if(!config.network.rpcUrls.length||config.network.rpcUrls.some(url=>!url.startsWith('https://')))throw Error('Deployment public RPC configuration is invalid.');
+ const contract=(name:string)=>{const c=config.contracts.find(c=>c.name===name);if(!c||!isAddress(c.address)||/^0x0{40}$/i.test(c.address)||!validAssetPath(c.abiPath)||!/^[a-f0-9]{64}$/.test(c.abiHash)||!Array.isArray(abis[name])||abiHash(abis[name])!==c.abiHash)throw Error(`${name} ABI differs from the attested deployment.`);return c.address;};
  A={...dependencies,Registry:contract('Registry'),Composer:contract('Composer'),Renderer:contract('Renderer'),chainId:config.chainId,publicRpcs:config.network.rpcUrls};
  registryAbi=abis.Registry;rendererAbi=abis.Renderer;composerAbi=abis.Composer;deployment=config;
- REPO='https://github.com/identity-md-launches/launch-2341-renderer-composer-registry';LAUNCH='./data/launch-record.json';EXPLORER=config.network.explorer;
+ REPO='https://github.com/identity-md-launches/launch-2362-renderer-composer-registry';LAUNCH='./data/launch-record.json';EXPLORER=config.network.explorer;
 }
 export async function loadRuntime(){
  const root=new URL('./',document.baseURI);
- async function json(path:string){if(path.includes('..')||path.startsWith('/')||/^[a-z]+:/i.test(path))throw Error('Invalid deployment asset path.');const r=await fetch(new URL(path,root),{cache:'no-cache'});if(!r.ok)throw Error(`Unable to load ${path}. Reload to retry.`);return r.json();}
+ async function json(path:string){if(!validAssetPath(path))throw Error('Invalid deployment asset path.');const r=await fetch(new URL(path,root),{cache:'no-cache'});if(!r.ok)throw Error(`Unable to load ${path}. Reload to retry.`);return r.json();}
  const config=await json('imd-deployment.json') as Deployment;
  const abis=Object.fromEntries(await Promise.all(config.contracts.map(async c=>[c.name,await json(c.abiPath)])));
  configureRuntime(config,abis);

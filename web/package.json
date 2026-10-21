@@ -8,6 +8,7 @@
     "build": "node scripts/prepare.mjs && tsc --noEmit && vite build && node scripts/manifest.mjs",
     "typecheck": "tsc --noEmit",
     "check:abi": "node scripts/check-abi.mjs",
+    "check:deployment": "node scripts/verify-deployment.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node scripts/prepare.mjs && tsx --import ./tests/setup.ts --test tests/*.test.ts",
     "check:export": "node scripts/check-export.mjs"

@@ -63,5 +63,5 @@ try{
  passed('unminted public contributor gets a pure Renderer preview',{traits:preview.traits,tokenId:String(preview.tokenId)});
 }finally{
  processNode.kill('SIGTERM');await new Promise<void>(r=>{if(processNode.exitCode!==null)r();else processNode.once('exit',()=>r());});
- await mkdir('test/scratch',{recursive:true});await writeFile('test/scratch/fork-results.json',JSON.stringify({upstream,block:String(block),localOnly:true,results},null,2)+'\n');
+ await mkdir('../test/scratch',{recursive:true});await writeFile('../test/scratch/fork-results.json',JSON.stringify({upstream,block:String(block),localOnly:true,results},null,2)+'\n');
 }
